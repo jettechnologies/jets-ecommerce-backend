@@ -5,6 +5,7 @@ services:
     rootDir: .
     plan: free
     buildCommand: "pnpm install --frozen-lockfile"
+    releaseCommand: "node ./db/init.js"
     startCommand: "pnpm start"
     envVars:
       - key: NODE_ENV
