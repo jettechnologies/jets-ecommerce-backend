@@ -2,7 +2,7 @@ services:
   - type: web
     name: ecommerce-backend
     env: node
-    rootDir: app
+    rootDir: .
     plan: free
     buildCommand: "pnpm install --frozen-lockfile"
     startCommand: "pnpm start"
