@@ -10,7 +10,7 @@
     "install": "node lib/customAuth/genKeyPair.js",
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "swagger": "node ./swagger.js"
+    "swagger": "node ./app/swagger.js"
   },
   "author": "Carolyn Kearney",
   "license": "ISC",
