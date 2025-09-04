@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: ecommerce-backend
+    env: node
+    rootDir: backend
+    plan: free
+    buildCommand: "pnpm install --frozen-lockfile"
+    startCommand: "pnpm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PGHOST
+        fromDatabase:
+          name: ecommerce-db
+          property: host
+      - key: PGUSER
+        fromDatabase:
+          name: ecommerce-db
+          property: user
+      - key: PGPASSWORD
+        fromDatabase:
+          name: ecommerce-db
+          property: password
+      - key: PGDATABASE
+        fromDatabase:
+          name: ecommerce-db
+          property: database
+      - key: PGPORT
+        fromDatabase:
+          name: ecommerce-db
+          property: port
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+
+databases:
+  - name: ecommerce-db
+    plan: free
