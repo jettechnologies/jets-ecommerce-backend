@@ -1,21 +1,29 @@
-CREATE TYPE "card_types" AS ENUM (
-  'credit',
-  'debit'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'card_types') THEN
+    CREATE TYPE card_types AS ENUM ('credit', 'debit');
+  END IF;
+END
+$$;
 
-CREATE TYPE "order_status" AS ENUM (
-  'pending',
-  'shipped',
-  'delivered',
-  'canceled'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'order_status') THEN
+    CREATE TYPE order_status AS ENUM ('pending', 'shipped', 'delivered', 'canceled');
+  END IF;
+END
+$$;
 
-CREATE TYPE "categories" AS ENUM (
-  'tops',
-  'bottoms'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'categories') THEN
+    CREATE TYPE categories AS ENUM ('tops', 'bottoms');
+  END IF;
+END
+$$;
 
-CREATE TABLE "users" (
+
+CREATE TABLE IF NOT EXISTS "users" (
   "id" SERIAL PRIMARY KEY,
   "pw_hash" varchar(128) NOT NULL,
   "pw_salt" varchar(64) NOT NULL,
@@ -28,7 +36,7 @@ CREATE TABLE "users" (
   "modified" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "addresses" (
+CREATE TABLE IF NOT EXISTS "addresses" (
   "id" SERIAL PRIMARY KEY,
   "user_id" int NOT NULL,
   "first_name" varchar(35),
@@ -43,7 +51,7 @@ CREATE TABLE "addresses" (
   "modified" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "cards" (
+CREATE TABLE IF NOT EXISTS "cards" (
   "id" SERIAL PRIMARY KEY,
   "user_id" int NOT NULL,
   "card_type" card_types NOT NULL DEFAULT ('credit'),
@@ -57,7 +65,7 @@ CREATE TABLE "cards" (
   "modified" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "orders" (
+CREATE TABLE IF NOT EXISTS "orders" (
   "id" SERIAL PRIMARY KEY,
   "user_id" int NOT NULL,
   "status" order_status NOT NULL DEFAULT ('pending'),
@@ -70,7 +78,7 @@ CREATE TABLE "orders" (
   "modified" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "order_items" (
+CREATE TABLE IF NOT EXISTS "order_items" (
   "order_id" int NOT NULL,
   "product_id" int NOT NULL,
   "quantity" int NOT NULL DEFAULT 1,
@@ -79,7 +87,7 @@ CREATE TABLE "order_items" (
   PRIMARY KEY ("order_id", "product_id")
 );
 
-CREATE TABLE "products" (
+CREATE TABLE IF NOT EXISTS "products" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
   "price" numeric NOT NULL,
@@ -90,14 +98,14 @@ CREATE TABLE "products" (
   "modified" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "carts" (
+CREATE TABLE IF NOT EXISTS "carts" (
   "id" SERIAL PRIMARY KEY,
   "user_id" int UNIQUE,
   "created" timestamp NOT NULL DEFAULT (now()),
   "modified" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "cart_items" (
+CREATE TABLE IF NOT EXISTS "cart_items" (
   "cart_id" int NOT NULL,
   "product_id" int NOT NULL,
   "quantity" int NOT NULL DEFAULT 1,
@@ -106,7 +114,7 @@ CREATE TABLE "cart_items" (
   PRIMARY KEY("cart_id", "product_id")
 );
 
-CREATE TABLE "session" (
+CREATE TABLE IF NOT EXISTS "session" (
   "sid" varchar PRIMARY KEY,
   "sess" json NOT NULL,
   "expire" timestamp(6) NOT NULL
