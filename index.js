@@ -1,17 +1,26 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const swaggerDocs = require("./app/swagger"); // import swagger function
+const swaggerDocs = require("./app/swagger");
+const initExpress = require("./app/express");
+const routesLoader = require("./routes");
 
 const app = express();
 
 // Enable CORS globally
 app.use(cors());
 
-// middlewares, routes, etc...
+// initialize express middlewares (session, csrf, etc.)
+initExpress(app);
 
 // Mount Swagger Docs
 swaggerDocs(app);
+
+// Parse JSON request bodies
+app.use(express.json());
+
+// Attach all routes
+routesLoader(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

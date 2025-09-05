@@ -1,6 +1,7 @@
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 require("dotenv").config();
+const cors = require("cors");
 
 module.exports = async (app) => {
   // swagger definition
@@ -53,19 +54,25 @@ module.exports = async (app) => {
     // import swaggerDefinitions
     swaggerDefinition: swaggerDefinition,
     // path to the API docs
+    // apis: [
+    //   "./routes/shop/home.js",
+    //   "./routes/shop/products.js",
+    //   "./routes/shop/*.js",
+    //   "./routes/auth/register.js",
+    //   "./routes/auth/*.js",
+    //   "./routes/account/index.js",
+    //   "./routes/account/*.js",
+    //   "./routes/checkout/index.js",
+    //   "./routes/checkout/auth.js",
+    //   "./routes/checkout/shipping.js",
+    //   "./routes/checkout/payment.js",
+    //   "./routes/checkout/*.js",
+    // ],
     apis: [
-      "./routes/shop/home.js",
-      "./routes/shop/products.js",
-      "./routes/shop/*.js",
-      "./routes/auth/register.js",
-      "./routes/auth/*.js",
-      "./routes/account/index.js",
-      "./routes/account/*.js",
-      "./routes/checkout/index.js",
-      "./routes/checkout/auth.js",
-      "./routes/checkout/shipping.js",
-      "./routes/checkout/payment.js",
-      "./routes/checkout/*.js",
+      "./routes/account/*",
+      "./routes/auth/*",
+      "./routes/checkout/*",
+      "./routes/shop/*",
     ],
   };
 
@@ -79,5 +86,5 @@ module.exports = async (app) => {
   });
 
   // serve swagger UI
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use("/api-docs", cors(), swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };

@@ -5,7 +5,8 @@ const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 const pool = require("../db/config");
 const { sanitizer } = require("../lib/sanitizer");
-const { csrfProtection } = require("../lib/csrf");
+// const { csrfMiddleware } = require("../lib/csrf");
+const csrfMiddleware = require("../middlewares/crsf-middleware");
 require("dotenv").config();
 
 module.exports = (app) => {
@@ -46,5 +47,6 @@ module.exports = (app) => {
   );
 
   // protect routes from CSRF attacks
-  app.use(csrfProtection);
+  // app.use(csrfProtection);
+  app.use(csrfMiddleware);
 };
